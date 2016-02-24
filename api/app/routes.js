@@ -2,19 +2,19 @@
 var express = require('express');
 
 //Models
-var Token = require('../models/token');
-var Users = require('../models/users');
+var Token = require('../models/token.js');
+var User = require('../models/users.js');
 
 module.exports = function(app, passport){
 
   app.post('/api/login', function(req, res) {
-    passport.authenticate('local-login', function(err, user, info) {
+    passport.authenticate('local-login', {failureFlash: true}, function(err, user, info) {
 
       //an error was encountered (ie. no database available)
       if (err) {
         return next(err);
-      }
 
+      }
       //a user wasn't returned; this means that the user isn't available, or the login information is incorrect
       if (!user) {
         return res.json({
@@ -23,7 +23,40 @@ module.exports = function(app, passport){
         });
       }
       else {
+        //success!  create a token and return the successful status and the if of the logged in user
 
+        // create a token (random 32 character string)
+        var token = Math.round((Math.pow(36, 32 + 1) - Math.random() * Math.pow(36, 32))).toString(36).slice(1);
+        // add the token to the database
+        Token.create({
+
+          user_id: user.id,
+          token: token
+        }, function(err, tokenRes) {
+          if (err)
+            res.send(err);
+
+          return res.json({
+            'loginstatus' : 'success',
+            'userid' : user.id,
+            'token' : token
+          });
+        });
+      }
+
+    })(req, res);
+
+  });
+
+  app.post('/api/signup', function(req, res){
+    passport.authenticate('local-signup', {failureFlash: true}, function(err, user){
+
+      //Do an error check
+      if (err){
+        return next(err)
+      }
+
+      else{
         //success!  create a token and return the successful status and the if of the logged in user
 
         // create a token (random 32 character string)
@@ -38,13 +71,13 @@ module.exports = function(app, passport){
             res.send(err);
 
           return res.json({
-            'loginstatus' : 'success',
+            'signupstatus' : 'success',
             'userid' : user.id,
             'token' : token
           });
         });
       }
-    })(req, res);
+    })(req,res);
   });
 
 // authenticates a userid/token combination
@@ -76,30 +109,30 @@ module.exports = function(app, passport){
 };
 
 // route middleware for API
-function isApiLoggedIn(req, res, next) {
-
-  // if user is authenticated in the session, carry on
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  else if (req.body.user_id && req.body.token) {
-    Token.find({
-      user_id: req.body.user_id,
-      token: req.body.token
-    }, function(err, tokenRes) {
-      if (err)
-        res.send({ status: 'error', message: "why aren't you logged in?"});
-
-      // not found
-      if (!tokenRes) {
-        res.send({ status: 'error', message: "why aren't you logged in?"});
-      }
-
-      // all checks pass, we're good!
-      return next();
-    });
-  }
-  else {
-    res.send({ status: 'error', message: "why aren't you logged in?"});
-  }
-}
+//function isApiLoggedIn(req, res, next) {
+//
+//  // if user is authenticated in the session, carry on
+//  if (req.isAuthenticated()) {
+//    return next();
+//  }
+//  else if (req.body.user_id && req.body.token) {
+//    Token.find({
+//      user_id: req.body.user_id,
+//      token: req.body.token
+//    }, function(err, tokenRes) {
+//      if (err)
+//        res.send({ status: 'error', message: "why aren't you logged in?"});
+//
+//      // not found
+//      if (!tokenRes) {
+//        res.send({ status: 'error', message: "why aren't you logged in?"});
+//      }
+//
+//      // all checks pass, we're good!
+//      return next();
+//    });
+//  }
+//  else {
+//    res.send({ status: 'error', message: "why aren't you logged in?"});
+//  }
+//}

@@ -1,3 +1,3 @@
 module.exports = {
-  url : 'mongodb://root@localhost:27017/gamrsApi'
+  url : 'mongodb://localhost:27017/gamrsApi'
 };
