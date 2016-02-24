@@ -1,13 +1,14 @@
 {
-  "name": "gam.rs2",
-  "version": "1.1.1",
-  "description": "gam.rs2: An Ionic project",
+  "name": "I have not thought of a name for this app",
+  "version": "1.2",
+  "description": "???: A Project in Futility",
   "dependencies": {
     "gulp": "^3.5.6",
-    "gulp-sass": "^2.0.4",
     "gulp-concat": "^2.2.0",
     "gulp-minify-css": "^0.3.0",
-    "gulp-rename": "^1.2.0"
+    "gulp-rename": "^1.2.0",
+    "gulp-sass": "^2.0.4",
+    "ngstorage": "^0.3.10"
   },
   "devDependencies": {
     "bower": "^1.3.3",

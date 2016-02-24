@@ -1,13 +1,25 @@
-//Dependencies
-var restful = require('node-restful');
-var mongoose = restful.mongoose;
+var mongoose = require('mongoose');
+var bcrypt   = require('bcrypt-nodejs');
 
-//Schema
-var userSchema = new mongoose.Schema({
-  name: String,
-  username: String,
-  password: String
+///////// USER SCHEMA //////////
+var userSchema = mongoose.Schema({
+
+  local            : {
+    display_name : String,
+    email        : String,
+    password     : String
+  }
+
 });
 
-//Return Model
-module.exports = restful.model('Users', userSchema);
+////////// METHODS //////////
+
+userSchema.methods.generateHash = function(password) {
+  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
+
+userSchema.methods.validPassword = function(password) {
+  return bcrypt.compareSync(password, this.local.password);
+};
+
+module.exports = mongoose.model('Users', userSchema);
