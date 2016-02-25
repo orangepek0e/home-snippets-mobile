@@ -1,6 +1,7 @@
 angular.module('starter.controllers', ['ngStorage'])
 
   .controller('DashCtrl', function ($scope) {
+
   })
 
   .controller('ChatsCtrl', function ($scope, Chats) {
@@ -18,9 +19,16 @@ angular.module('starter.controllers', ['ngStorage'])
     };
   })
 
-  .controller('LoginCtrl', function ($scope, $http, $localStorage, $state) {
+  .controller('AppCtrl', function ($scope, $http, $localStorage, $state, isLoggedIn) {
     $scope.loginData = {};
-    $scope.loggedIn = false;
+    $scope.loggedIn = isLoggedIn;
+
+    $scope.logout = function() {
+      delete $localStorage.user_id;
+      delete $localStorage.token;
+      $scope.loggedIn = false;
+      console.log($localStorage.user_id, $localStorage.token);
+    };
 
     $scope.login = function () {
       console.log("LOGIN user: " + $scope.loginData.username + " - PW: " + $scope.loginData.password);
