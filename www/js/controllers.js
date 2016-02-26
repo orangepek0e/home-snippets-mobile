@@ -31,7 +31,7 @@ angular.module('starter.controllers', ['ngStorage'])
     };
 
     $scope.signup = function(){
-      $http.post("http://localhost:8080/api/signup", {display_name: $scope.loginData.display_name, email: $scope.loginData.email, password: $scope.loginData.password}).then(function(result){
+      $http.post("http://162.243.192.217:8080/api/signup", {display_name: $scope.loginData.display_name, email: $scope.loginData.email, password: $scope.loginData.password}).then(function(result){
         if(result.data.signupstatus == "success"){
           $localStorage.user_id = result.data.userid;
           $localStorage.token = result.data.token;
@@ -49,7 +49,7 @@ angular.module('starter.controllers', ['ngStorage'])
 
     $scope.login = function () {
       console.log("LOGIN user: " + $scope.loginData.email + " - PW: " + $scope.loginData.password);
-      $http.post("http://localhost:8080/api/login", {email: $scope.loginData.email, password: $scope.loginData.password}).then(function(result){
+      $http.post("http://162.243.192.217:8080/api/login", {email: $scope.loginData.email, password: $scope.loginData.password}).then(function(result){
         if (result.data.loginstatus == "success"){
           $localStorage.user_id = result.data.userid;
           $localStorage.token = result.data.token;
