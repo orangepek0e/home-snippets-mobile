@@ -12,8 +12,8 @@ angular.module('starter.User', [])
             token: $localStorage.token
           }).then(function(result){
             return true;
-          }).catch(function onError(err){
-            console.log(err);
+          }).catch(function onError(sailsResponse){
+            console.log(sailsResponse);
             delete $localStorage.user_id;
             delete $localStorage.token;
             return false;

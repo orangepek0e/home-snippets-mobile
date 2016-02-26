@@ -19,9 +19,9 @@ angular.module('starter.controllers', ['ngStorage'])
     };
   })
 
-  .controller('AppCtrl', function ($scope, $http, $localStorage, $state, isLoggedIn) {
+  .controller('AppCtrl', function ($scope, $http, $localStorage, $state, isLoggedin) {
     $scope.loginData = {};
-    $scope.loggedIn = isLoggedIn;
+    $scope.loggedIn = isLoggedin;
 
     $scope.logout = function() {
       delete $localStorage.user_id;
@@ -30,9 +30,26 @@ angular.module('starter.controllers', ['ngStorage'])
       console.log($localStorage.user_id, $localStorage.token);
     };
 
+    $scope.signup = function(){
+      $http.post("http://localhost:8080/api/signup", {display_name: $scope.loginData.display_name, email: $scope.loginData.email, password: $scope.loginData.password}).then(function(result){
+        if(result.data.signupstatus == "success"){
+          $localStorage.user_id = result.data.userid;
+          $localStorage.token = result.data.token;
+          $scope.loggedIn = true;
+          $state.go('tab.dash');
+          alert("Account successfully created!");
+        }else{
+          alert(result.data.message);
+        }
+      }, function(error){
+        alert("There was an issue with creating your account.");
+        console.log(error);
+      });
+    };
+
     $scope.login = function () {
-      console.log("LOGIN user: " + $scope.loginData.username + " - PW: " + $scope.loginData.password);
-      $http.post("http://localhost:8080/api/login", {email: $scope.loginData.username, password: $scope.loginData.password}).then(function(result){
+      console.log("LOGIN user: " + $scope.loginData.email + " - PW: " + $scope.loginData.password);
+      $http.post("http://localhost:8080/api/login", {email: $scope.loginData.email, password: $scope.loginData.password}).then(function(result){
         if (result.data.loginstatus == "success"){
           $localStorage.user_id = result.data.userid;
           $localStorage.token = result.data.token;
@@ -49,6 +66,10 @@ angular.module('starter.controllers', ['ngStorage'])
         console.log(error);
       });
     };
+
+    $scope.go = function(location){
+      $state.go(location);
+    }
   })
 
   .controller('ChatDetailCtrl', function ($scope, $stateParams, Chats) {
