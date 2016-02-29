@@ -1,27 +1,64 @@
 angular.module('starter.controllers', ['ngStorage'])
 
-  .controller('DashCtrl', function ($scope) {
+  .controller('DashCtrl', function ($scope, $ionicLoading, $ionicModal, $localStorage, $http, $state) {
+    $scope.posts = [];
+    $scope.newPost = {};
 
-  })
-
-  .controller('ChatsCtrl', function ($scope, Chats) {
-    // With the new view caching in Ionic, Controllers are only called
-    // when they are recreated or on app start, instead of every page change.
-    // To listen for when this page is active (for example, to refresh data),
-    // listen for the $ionicView.enter event:
-    //
-    //$scope.$on('$ionicView.enter', function(e) {
+    //$ionicLoading.show({
+    //  template: 'Loading Posts...'
     //});
 
-    $scope.chats = Chats.all();
-    $scope.remove = function (chat) {
-      Chats.remove(chat);
+    $scope.loadPosts = function(){
+      $http.get("http://localhost:8080/api/post").then(function(result){
+        $scope.posts = result.data;
+        $ionicLoading.hide();
+      }, function(error){
+        alert("There was an issue retrieving posts. Check the logs.");
+        console.log(error);
+        $ionicLoading.hide();
+      })
     };
+
+    $ionicModal.fromTemplateUrl('templates/post-form.html', {
+      scope: $scope
+    }).then(function(modal){
+      $scope.modal = modal;
+    });
+
+    $scope.openModal = function(){
+      $scope.modal.show();
+    };
+
+    $scope.closeModal = function(){
+      $scope.modal.hide();
+    };
+
+    $scope.createPost = function(){
+
+      $ionicLoading.show({
+        template: 'Posting your ad...'
+      });
+
+      $http.post("http://localhost:8080/api/post", $scope.newPost).success(function(response){
+        alert("Post was successful!");
+        $scope.newPost = {};
+        $ionicLoading.hide();
+        $scope.closeModal();
+      }).error(function(error){
+        alert("There was an issue posting your ad.");
+        console.log(error);
+        $ionicLoading.hide();
+        $scope.closeModal();
+      })
+
+    }
+
+
   })
 
-  .controller('AppCtrl', function ($scope, $http, $localStorage, $state, isLoggedin) {
+  .controller('AppCtrl', function ($scope, $http, $localStorage, $state, isLoggedIn) {
     $scope.loginData = {};
-    $scope.loggedIn = isLoggedin;
+    $scope.loggedIn = isLoggedIn;
 
     $scope.logout = function() {
       delete $localStorage.user_id;
@@ -31,7 +68,7 @@ angular.module('starter.controllers', ['ngStorage'])
     };
 
     $scope.signup = function(){
-      $http.post("http://162.243.192.217:8080/api/signup", {display_name: $scope.loginData.display_name, email: $scope.loginData.email, password: $scope.loginData.password}).then(function(result){
+      $http.post("http://localhost:8080/api/signup", {display_name: $scope.loginData.display_name, email: $scope.loginData.email, password: $scope.loginData.password}).then(function(result){
         if(result.data.signupstatus == "success"){
           $localStorage.user_id = result.data.userid;
           $localStorage.token = result.data.token;
@@ -49,7 +86,7 @@ angular.module('starter.controllers', ['ngStorage'])
 
     $scope.login = function () {
       console.log("LOGIN user: " + $scope.loginData.email + " - PW: " + $scope.loginData.password);
-      $http.post("http://162.243.192.217:8080/api/login", {email: $scope.loginData.email, password: $scope.loginData.password}).then(function(result){
+      $http.post("http://localhost:8080/api/login", {email: $scope.loginData.email, password: $scope.loginData.password}).then(function(result){
         if (result.data.loginstatus == "success"){
           $localStorage.user_id = result.data.userid;
           $localStorage.token = result.data.token;
@@ -70,6 +107,21 @@ angular.module('starter.controllers', ['ngStorage'])
     $scope.go = function(location){
       $state.go(location);
     }
+  })
+
+  .controller('ChatsCtrl', function ($scope, Chats) {
+    // With the new view caching in Ionic, Controllers are only called
+    // when they are recreated or on app start, instead of every page change.
+    // To listen for when this page is active (for example, to refresh data),
+    // listen for the $ionicView.enter event:
+    //
+    //$scope.$on('$ionicView.enter', function(e) {
+    //});
+
+    $scope.chats = Chats.all();
+    $scope.remove = function (chat) {
+      Chats.remove(chat);
+    };
   })
 
   .controller('ChatDetailCtrl', function ($scope, $stateParams, Chats) {

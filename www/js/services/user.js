@@ -1,6 +1,6 @@
 angular.module('starter.User', [])
 
-.factory('User', function($http, $localStorage, $state){
+.factory('User', function($http, $localStorage){
 
     var User = {
 
@@ -20,7 +20,6 @@ angular.module('starter.User', [])
           });
         }
         else {
-          $state.go('login');
           return false;
         }
       }

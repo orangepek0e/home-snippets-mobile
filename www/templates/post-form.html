@@ -1,0 +1,27 @@
+<ion-view view-title="Make a Post">
+  <ion-content class="padding">
+    <form id="newPost" ng-submit="createPost()">
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">Title</span>
+          <input type="text" ng-model="newPost.title">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Game Title</span>
+          <input type="text" ng-model="newPost.gameName">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">System</span>
+          <input type="text" ng-model="newPost.systemName">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Description</span>
+          <input type="text" ng-model="newPost.description">
+        </label>
+
+        <button type="submit" class="button button-stable">Submit</button>
+
+      </div>
+    </form>
+  </ion-content>
+</ion-view>
