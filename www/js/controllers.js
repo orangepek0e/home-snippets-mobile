@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['ngStorage'])
 
-  .controller('DashCtrl', function ($scope, $ionicLoading, $ionicModal, $localStorage, $http, $state) {
+  .controller('DashCtrl', function ($scope, $ionicLoading, $ionicModal, $localStorage, $http) {
     $scope.posts = [];
     $scope.newPost = {};
 
@@ -58,7 +58,11 @@ angular.module('starter.controllers', ['ngStorage'])
 
   .controller('AppCtrl', function ($scope, $http, $localStorage, $state, isLoggedIn) {
     $scope.loginData = {};
-    //$scope.loggedIn = isLoggedIn;
+    $scope.loggedIn = isLoggedIn;
+
+    if($scope.loggedIn){
+      $state.go('tab.dash');
+    }
 
 
     console.log("The login status is "+ $scope.loggedIn);

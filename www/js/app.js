@@ -34,7 +34,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.User'])
     .state('login', {
       url: '/login',
       templateUrl: 'templates/login.html',
-      controller: 'AppCtrl'
+      controller: 'AppCtrl',
+      resolve: {
+        isLoggedIn: function(User){
+          //return User.checkToken();
+          console.log(User.checkToken());
+          return User.checkToken();
+        }
+      }
     })
 
     .state('signup', {
@@ -47,14 +54,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.User'])
     .state('tab', {
     url: '/tab',
     abstract: true,
-    templateUrl: 'templates/tabs.html',
-    controller: 'AppCtrl',
-    resolve: {
-      isLoggedIn: function(){
-        //return User.checkToken();
-        return false;
-      }
-    }
+    templateUrl: 'templates/tabs.html'
   })
 
   // Each tab has its own nav history stack:
