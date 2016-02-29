@@ -34,23 +34,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.User'])
     .state('login', {
       url: '/login',
       templateUrl: 'templates/login.html',
-      controller: 'AppCtrl',
-      resolve: {
-        isLoggedIn: function(User){
-          return User.checkToken();
-        }
-      }
+      controller: 'AppCtrl'
     })
 
     .state('signup', {
       url: '/signup',
       templateUrl: 'templates/signup.html',
-      controller: 'AppCtrl',
-      resolve: {
-        isLoggedIn: function(User){
-          return User.checkToken();
-        }
-      }
+      controller: 'AppCtrl'
     })
 
     // setup an abstract state for the tabs directive
@@ -60,8 +50,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.User'])
     templateUrl: 'templates/tabs.html',
     controller: 'AppCtrl',
     resolve: {
-      isLoggedIn: function(User){
-        return User.checkToken();
+      isLoggedIn: function(){
+        //return User.checkToken();
+        return false;
       }
     }
   })

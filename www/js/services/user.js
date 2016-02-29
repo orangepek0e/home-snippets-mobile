@@ -1,4 +1,4 @@
-angular.module('starter.User', [])
+angular.module('starter.User', ['ngStorage'])
 
 .factory('User', function($http, $localStorage){
 

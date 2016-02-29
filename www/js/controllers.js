@@ -58,7 +58,10 @@ angular.module('starter.controllers', ['ngStorage'])
 
   .controller('AppCtrl', function ($scope, $http, $localStorage, $state, isLoggedIn) {
     $scope.loginData = {};
-    $scope.loggedIn = isLoggedIn;
+    //$scope.loggedIn = isLoggedIn;
+
+
+    console.log("The login status is "+ $scope.loggedIn);
 
     $scope.logout = function() {
       delete $localStorage.user_id;
