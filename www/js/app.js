@@ -38,7 +38,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.User'])
       resolve: {
         isLoggedIn: function(User){
           //return User.checkToken();
-          console.log(User.checkToken());
           return User.checkToken();
         }
       }
@@ -73,8 +72,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.User'])
       url: '/chats',
       views: {
         'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
+          templateUrl: 'templates/tab-chats.html'
         }
       }
     })
