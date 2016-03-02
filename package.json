@@ -1,5 +1,5 @@
 {
-  "name": "gam.rs",
+  "name": "home-snippets",
   "version": "1.0.0",
   "description": "This is going to be rad",
   "main": "gulpfile.js",
@@ -8,11 +8,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/orangepek0e/gamrsApp.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/orangepek0e/gamrsApp/issues"
   }
 }

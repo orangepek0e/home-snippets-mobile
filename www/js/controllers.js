@@ -3,13 +3,19 @@ angular.module('starter.controllers', ['ngStorage'])
   .controller('DashCtrl', function ($scope, $ionicLoading, $ionicModal, $localStorage, $http) {
     $scope.posts = [];
     $scope.newPost = {};
+    $scope.newPost.wifi = false;
+    $scope.newPost.pets = false;
+    $scope.newPost.parking = false;
+    $scope.newPost.laundry = false;
+    $scope.newPost.furnished = false;
+    $scope.newPost.smoking = false;
 
     //$ionicLoading.show({
     //  template: 'Loading Posts...'
     //});
 
     $scope.loadPosts = function(){
-      $http.get("http://198.211.99.72:8080/api/post").then(function(result){
+      $http.get("http://localhost:8080/api/post").then(function(result){
         $scope.posts = result.data;
         $ionicLoading.hide();
       }, function(error){
@@ -39,9 +45,17 @@ angular.module('starter.controllers', ['ngStorage'])
         template: 'Posting your ad...'
       });
 
-      $http.post("http://198.211.99.72:8080/api/post", $scope.newPost).success(function(response){
+      $http.post("http://localhost:8080/api/post", $scope.newPost).success(function(response){
+        console.log(response);
         alert("Post was successful!");
+        console.log($scope.newPost);
         $scope.newPost = {};
+        $scope.newPost.wifi = false;
+        $scope.newPost.pets = false;
+        $scope.newPost.parking = false;
+        $scope.newPost.laundry = false;
+        $scope.newPost.furnished = false;
+        $scope.newPost.smoking = false;
         $ionicLoading.hide();
         $scope.closeModal();
       }).error(function(error){
@@ -51,9 +65,74 @@ angular.module('starter.controllers', ['ngStorage'])
         $scope.closeModal();
       })
 
+    };
+
+    $scope.toggleFilter = function(filter) {
+      switch (filter) {
+        case "wifi":
+          console.log('wifi have been toggled');
+          $scope.newPost.wifi = !$scope.newPost.wifi;
+          console.log($scope.newPost.wifi);
+          if ($scope.newPost.wifi) {
+            $(".tagIconWifi").addClass("tagIconActive");
+          } else {
+            $(".tagIconWifi").removeClass("tagIconActive");
+          }
+          break;
+        case "pets":
+          console.log('pets have been toggled');
+          $scope.newPost.pets = !$scope.newPost.pets;
+          console.log($scope.newPost.pets);
+          if ($scope.newPost.pets) {
+            $(".tagIconPets").addClass("tagIconActive");
+          } else {
+            $(".tagIconPets").removeClass("tagIconActive");
+          }
+          break;
+        case "parking":
+          console.log('parking has been toggled');
+          $scope.newPost.parking = !$scope.newPost.parking;
+          console.log($scope.newPost.parking);
+          if ($scope.newPost.parking) {
+            $(".tagIconPark").addClass("tagIconActive");
+          } else {
+            $(".tagIconPark").removeClass("tagIconActive");
+          }
+          break;
+        case "laundry":
+          console.log("laundry has been toggled");
+          $scope.newPost.laundry = !$scope.newPost.laundry;
+          console.log($scope.newPost.laundry);
+          if ($scope.newPost.laundry) {
+            $(".tagIconLaun").addClass("tagIconActive");
+          } else {
+            $(".tagIconLaun").removeClass("tagIconActive");
+          }
+          break;
+        case "furnished":
+          console.log("furnished has been toggled");
+          $scope.newPost.furnished = !$scope.newPost.furnished;
+          console.log($scope.newPost.furnished);
+          if ($scope.newPost.furnished) {
+            $(".tagIconFurn").addClass("tagIconActive");
+          } else {
+            $(".tagIconFurn").removeClass("tagIconActive");
+          }
+          break;
+        case "smoking":
+          console.log("smoking has been toggled");
+          $scope.newPost.smoking = !$scope.newPost.smoking;
+          console.log($scope.newPost.smoking);
+          if ($scope.newPost.smoking) {
+            $(".tagIconSmok").addClass("tagIconActive");
+          } else {
+            $(".tagIconSmok").removeClass("tagIconActive");
+          }
+          break;
+
+      }
+
     }
-
-
   })
 
   .controller('AppCtrl', function ($scope, $http, $localStorage, $state, isLoggedIn) {
@@ -71,11 +150,12 @@ angular.module('starter.controllers', ['ngStorage'])
       delete $localStorage.user_id;
       delete $localStorage.token;
       $scope.loggedIn = false;
+      $state.go('login');
       console.log($localStorage.user_id, $localStorage.token);
     };
 
     $scope.signup = function(){
-      $http.post("http://198.211.99.72:8080/api/signup", {display_name: $scope.loginData.display_name, email: $scope.loginData.email, password: $scope.loginData.password}).then(function(result){
+      $http.post("http://localhost:8080/api/signup", {display_name: $scope.loginData.display_name, email: $scope.loginData.email, password: $scope.loginData.password}).then(function(result){
         if(result.data.signupstatus == "success"){
           $localStorage.user_id = result.data.userid;
           $localStorage.token = result.data.token;
@@ -93,7 +173,7 @@ angular.module('starter.controllers', ['ngStorage'])
 
     $scope.login = function () {
       console.log("LOGIN user: " + $scope.loginData.email + " - PW: " + $scope.loginData.password);
-      $http.post("http://198.211.99.72:8080/api/login", {email: $scope.loginData.email, password: $scope.loginData.password}).then(function(result){
+      $http.post("http://localhost:8080/api/login", {email: $scope.loginData.email, password: $scope.loginData.password}).then(function(result){
         if (result.data.loginstatus == "success"){
           $localStorage.user_id = result.data.userid;
           $localStorage.token = result.data.token;
@@ -135,8 +215,12 @@ angular.module('starter.controllers', ['ngStorage'])
     $scope.chat = Chats.get($stateParams.chatId);
   })
 
-  .controller('AccountCtrl', function ($scope) {
-    $scope.settings = {
-      enableFriends: true
+  .controller('AccountCtrl', function ($scope, $state, $localStorage) {
+    $scope.logout = function() {
+      delete $localStorage.user_id;
+      delete $localStorage.token;
+      $scope.loggedIn = false;
+      $state.go('login');
+      console.log($localStorage.user_id, $localStorage.token);
     };
   });

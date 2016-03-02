@@ -1,27 +1,64 @@
 <ion-view view-title="Make a Post">
   <ion-content class="padding">
     <form id="newPost" ng-submit="createPost()">
-      <div class="list">
-        <label class="item item-input">
-          <span class="input-label">Title</span>
-          <input type="text" ng-model="newPost.title" required>
-        </label>
-        <label class="item item-input">
-          <span class="input-label">Game Title</span>
-          <input type="text" ng-model="newPost.gameName" required>
-        </label>
-        <label class="item item-input">
-          <span class="input-label">System</span>
-          <input type="text" ng-model="newPost.systemName" required>
-        </label>
-        <label class="item item-input">
-          <span class="input-label">Description</span>
-          <input type="text" ng-model="newPost.description" required>
-        </label>
+      <input type="text" ng-model="newPost.title" class="form-control" placeholder="Please enter a title" required><br>
+      <input type="number" ng-model="newPost.rooms" class="form-control" placeholder="How many rooms?" required><br>
+      <input type="number" ng-model="newPost.price" class="form-control" placeholder="What's the price?" required><br>
 
-        <button type="submit" class="button button-large button-stable">Submit</button>
+      <div class="row">
+        <div class="col-sm-4">
+          <img  alt="Rooms" src="../img/tv-internet.png" height="auto" width="50px" id="rooms">
+        </div>
+        <div class="col-sm-4">
+          <img  alt="Pets" src="../img/pets.png" height="auto" width="45px" id="pets">
+        </div>
+        <div class="col-sm-4">
+          <img  alt="Parking" src="../img/parking.png" height="auto" width="50px" id="parking">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4">
+          <button type="button" class="btn tagIcon tagIconWifi" ng-click="toggleFilter('wifi')">Wifi</button>
+        </div>
+        <div class="col-sm-4">
+          <button type="button" class="btn tagIcon tagIconPets" ng-click="toggleFilter('pets')">Pets</button>
+        </div>
+        <div class="col-sm-4">
+          <button type="button" class="btn tagIcon tagIconPark" ng-click="toggleFilter('parking')">Parking</button>
+        </div>
 
       </div>
+
+      <br> <br>
+      <div class="row">
+        <div class="col-sm-4">
+          <img  alt="Rooms" src="../img/laundry.png" height="auto" width="50px" id="tv-internet">
+        </div>
+
+        <div class="col-sm-4">
+          <img  alt="Pets" src="../img/sofa.png" height="auto" width="50px" id="laundry">
+        </div>
+
+        <div class="col-sm-4">
+          <img  alt="Parking" src="../img/smoking.png" height="auto" width="50px" id="sofa">
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-sm-4">
+          <button type="button" class="btn tagIcon tagIconLaun" ng-click="toggleFilter('laundry')">Laundry</button>
+        </div>
+        <div class="col-sm-4">
+          <button type="button" class="btn tagIcon tagIconFurn" ng-click="toggleFilter('furnished')">Furnished</button>
+        </div>
+        <div class="col-sm-4">
+          <button type="button" class="btn tagIcon tagIconSmok" ng-click="toggleFilter('smoking')">Smoking</button>
+          <br><br>
+        </div>
+
+      </div>
+      <button id="submitButton" type="submit" class="btn btn-warning">Submit</button>
     </form>
   </ion-content>
 </ion-view>
