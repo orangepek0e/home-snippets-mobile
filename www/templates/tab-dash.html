@@ -4,16 +4,44 @@
     <div class="container" ng-init="loadPosts()">
       <div ng-repeat="post in posts">
         <div class="card">
-          <div class="item item-divider" style="text-align: center">{{post.title}}</div>
-          <div class="item item-divider row">
-            <div class="col col-65">{{post.gameName}}</div>
-            <div class="col col-35">{{post.systemName}}</div>
+          <div class="card-block">
+            <h4 class="card-title">{{post.title}}</h4>
+            <h4>This is the post content: {{post.content}}</h4>
           </div>
-          <div class="item item-text-wrap">
-            {{post.description}}
+          <div ng-show="post.content">
+            <!--<google-youtube fluid="true" video-id="{{post.content}}"></google-youtube>-->
           </div>
-          <div class="item item-divider">Location</div>
+          <div class="card-block">
+            <br>
+            <a href="#" class="card-link">There are {{post.rooms}} rooms in this location</a>
+            <br>
+            <a href="#" class="card-link">This place costs: ${{post.price}}</a>
+            <br><br>
 
+          </div>
+          <br>
+
+
+          <div class="card-block">
+            <div class="row">
+              <div class="col-sm-12">
+                <div style="width:auto; height:auto;  float:left; margin-left:17%; background-color: #FED136; color:white; " ng-show="post.wifi"> <img  alt="Rooms" src="../img/tv-internet.png" height="auto" width="45px" id="tv-internet"></div>
+
+                <div style="width:auto; height:auto; float:left; margin-left:17%; background-color: #FED136; color:white;" ng-show="post.pets"><img  alt="Pets" src="../img/pets.png" height="auto" width="45px" id="pets"></div>
+
+                <div style="width:auto; height:auto;  float:left;margin-left:17%; background-color: #FED136; color:white;" ng-show="post.parking"><img  alt="Parking" src="../img/parking.png" height="auto" width="45px" id="parking"></div>
+
+                <br><br><br>
+
+                <div style="width:auto; height:auto; float:left; margin-left:17%; background-color: #FED136; color:white;" ng-show="post.laundry"> <img  alt="Pets" src="../img/laundry.png" height="auto" width="47px" id="laundry"></div>
+
+                <div style="width:auto; height:auto; float:left; margin-left:17%; background-color: #FED136; color:white;" ng-show="post.furnished"> <img  alt="Parking" src="../img/sofa.png" height="auto" width="47px" id="sofa"></div>
+
+                <div style="width:auto; height:auto; float:left; margin-left:16%; background-color: #FED136; color:white;" ng-show="post.smoking"><img  alt="Pets" src="../img/smoking.png" height="auto" width="47px"></div>
+              </div>
+
+            </div>
+          </div>
         </div>
       </div>
     </div>
