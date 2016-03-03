@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['ngStorage', 'ngCordova'])
 
-  .controller('DashCtrl', function ($scope, $http, $ionicLoading, $state, $ionicModal, $localStorage, $cordovaFileTransfer ) {
+  .controller('DashCtrl', function ($scope, $http, $ionicLoading, $state, $ionicModal, $cordovaFileTransfer, $localStorage ) {
     $scope.posts = [];
     $scope.newPost = {};
     $scope.newPost.wifi = false;
@@ -16,7 +16,7 @@ angular.module('starter.controllers', ['ngStorage', 'ngCordova'])
     //});
 
     $scope.loadPosts = function(){
-      $http.get("http://localhost:8080/api/post").then(function(result){
+      $http.get("http://162.243.234.83:8080/api/post").then(function(result){
         $scope.posts = result.data;
         $ionicLoading.hide();
       }, function(error){
@@ -47,6 +47,12 @@ angular.module('starter.controllers', ['ngStorage', 'ngCordova'])
       });
 
       console.log($scope.newPost.title);
+      console.log($scope.newPost.rooms);
+      console.log($scope.newPost.price);
+      console.log($scope.newPost.wifi);
+      console.log($scope.newPost.parking);
+      console.log($scope.newPost.laundry);
+      console.log($scope.newPost.content);
 
       var filename = "photo.png";
 
@@ -69,9 +75,11 @@ angular.module('starter.controllers', ['ngStorage', 'ngCordova'])
           'smoking': $scope.newPost.smoking
         }
       };
+      console.log(options.params);
+      console.log($scope.newPost.title+ "2");
 
       console.log("2"+ $scope.newPost.content);
-      $cordovaFileTransfer.upload("http://localhost:8080/api/post", $scope.newPost.content, options).success(function(response){
+      $cordovaFileTransfer.upload("http://162.243.234.83:8080/api/post", $scope.newPost.content, options).then(function(response){
         console.log(response);
         alert("Post was successful!");
         console.log($scope.newPost);
@@ -113,7 +121,7 @@ angular.module('starter.controllers', ['ngStorage', 'ngCordova'])
         template: 'Removing your Post...'
       });
 
-      $http.delete('http://localhost:8080/api/post/' + id).success(function(data) {
+      $http.delete('http://162.243.234.83:8080/api/post/' + id).success(function(data) {
         $scope.todos = data; // assign our new list of todos
         $state.go($state.current, {}, {reload: true});
         $ionicLoading.hide();
@@ -209,7 +217,7 @@ angular.module('starter.controllers', ['ngStorage', 'ngCordova'])
     };
 
     $scope.signup = function(){
-      $http.post("http://localhost:8080/api/signup", {display_name: $scope.loginData.display_name, email: $scope.loginData.email, password: $scope.loginData.password}).then(function(result){
+      $http.post("http://162.243.234.83:8080/api/signup", {display_name: $scope.loginData.display_name, email: $scope.loginData.email, password: $scope.loginData.password}).then(function(result){
         if(result.data.signupstatus == "success"){
           $localStorage.user_id = result.data.userid;
           $localStorage.token = result.data.token;
@@ -227,7 +235,7 @@ angular.module('starter.controllers', ['ngStorage', 'ngCordova'])
 
     $scope.login = function () {
       console.log("LOGIN user: " + $scope.loginData.email + " - PW: " + $scope.loginData.password);
-      $http.post("http://localhost:8080/api/login", {email: $scope.loginData.email, password: $scope.loginData.password}).then(function(result){
+      $http.post("http://162.243.234.83:8080/api/login", {email: $scope.loginData.email, password: $scope.loginData.password}).then(function(result){
         if (result.data.loginstatus == "success"){
           $localStorage.user_id = result.data.userid;
           $localStorage.token = result.data.token;
@@ -242,6 +250,7 @@ angular.module('starter.controllers', ['ngStorage', 'ngCordova'])
       }, function(error){
         alert("There was a problem getting your profile. Check the logs for details.");
         console.log(error);
+        alert(error);
       });
     };
 

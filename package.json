@@ -11,6 +11,9 @@
   },
   "author": "",
   "license": "ISC",
-  "bugs": {
-  }
+  "bugs": {},
+  "cordovaPlugins": [
+    "cordova-plugin-file-transfer"
+  ],
+  "cordovaPlatforms": []
 }

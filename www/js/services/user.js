@@ -7,7 +7,7 @@ angular.module('starter.User', ['ngStorage'])
       checkToken: function() {
         console.log("1userid",$localStorage.user_id, "token:", $localStorage.token);
         if($localStorage.hasOwnProperty("token") && $localStorage.hasOwnProperty("user_id")){
-          return $http.post('http://localhost:8080/api/authlogin', {
+          return $http.post('http://162.243.234.83:8080/api/authlogin', {
             user_id: $localStorage.user_id,
             token: $localStorage.token
           }).then(function(result){
