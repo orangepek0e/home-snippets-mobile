@@ -57,20 +57,12 @@
           <br><br>
         </div>
 
+        <button ng-click="takePhoto()" class="button button-block button-dark">
+          Take Photo!
+        </button>
+
       </div>
 
-      <div class="list">
-        <div class="item item-divider">
-          <i class="ion-videocamera"></i>
-          Current clip
-        </div>
-        <img ng-click="showClip(clip)" style="height: 250px; width: 150px;"/>
-      </div>
-      <div class="button-bar">
-        <button class="button button-positive" ng-click="captureVideo()">
-          Capture a video
-        </button>
-      </div>
       <button id="submitButton" type="submit" class="btn btn-warning">Submit</button>
     </form>
   </ion-content>

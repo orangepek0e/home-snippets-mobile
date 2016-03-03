@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['ngStorage', 'ngCordova'])
 
-  .controller('DashCtrl', function ($scope, $ionicLoading, $ionicModal, $localStorage, $http, $cordovaCapture, VideoService) {
+  .controller('DashCtrl', function ($scope, $http, $ionicLoading, $state, $ionicModal, $localStorage, $cordovaFileTransfer ) {
     $scope.posts = [];
     $scope.newPost = {};
     $scope.newPost.wifi = false;
@@ -9,6 +9,7 @@ angular.module('starter.controllers', ['ngStorage', 'ngCordova'])
     $scope.newPost.laundry = false;
     $scope.newPost.furnished = false;
     $scope.newPost.smoking = false;
+    $scope.newPost.content = "";
 
     //$ionicLoading.show({
     //  template: 'Loading Posts...'
@@ -45,7 +46,32 @@ angular.module('starter.controllers', ['ngStorage', 'ngCordova'])
         template: 'Posting your ad...'
       });
 
-      $http.post("http://localhost:8080/api/post", $scope.newPost).success(function(response){
+      console.log($scope.newPost.title);
+
+      var filename = "photo.png";
+
+      var options = {
+        fileKey: "file",
+        fileName: filename,
+        chunkedMode: false,
+        mimeType: "image/png",
+        params: {
+          'token': $localStorage.token,
+          'user_id': $localStorage.user_id,
+          'title': $scope.newPost.title,
+          'rooms': $scope.newPost.rooms,
+          'price': $scope.newPost.price,
+          'wifi': $scope.newPost.wifi,
+          'pets': $scope.newPost.pets,
+          'parking': $scope.newPost.parking,
+          'laundry': $scope.newPost.laundry,
+          'furnished': $scope.newPost.furnished,
+          'smoking': $scope.newPost.smoking
+        }
+      };
+
+      console.log("2"+ $scope.newPost.content);
+      $cordovaFileTransfer.upload("http://localhost:8080/api/post", $scope.newPost.content, options).success(function(response){
         console.log(response);
         alert("Post was successful!");
         console.log($scope.newPost);
@@ -65,6 +91,33 @@ angular.module('starter.controllers', ['ngStorage', 'ngCordova'])
         $scope.closeModal();
       })
 
+    };
+
+    $scope.takePhoto = function() {
+      var cameraOptions = {
+        destinationType: Camera.DestinationType.FILE_URI,
+        targetWidth: 700,
+        targetHeight: 700
+      };
+
+      navigator.camera.getPicture(function(data){
+
+        $scope.newPost.content = data;
+      }, function(err){
+        alert("Oops ! Can't take your photo!");
+      }, cameraOptions);
+    };
+
+    $scope.deletePost = function(id) {
+      $ionicLoading.show({
+        template: 'Removing your Post...'
+      });
+
+      $http.delete('http://localhost:8080/api/post/' + id).success(function(data) {
+        $scope.todos = data; // assign our new list of todos
+        $state.go($state.current, {}, {reload: true});
+        $ionicLoading.hide();
+      });
     };
 
     $scope.toggleFilter = function(filter) {
@@ -134,29 +187,6 @@ angular.module('starter.controllers', ['ngStorage', 'ngCordova'])
 
     }
 
-    $scope.clip = '';
-
-    $scope.captureVideo = function() {
-      $cordovaCapture.captureVideo().then(function(videoData) {
-        VideoService.saveVideo(videoData).success(function(data) {
-          $scope.clip = data;
-          $scope.$apply();
-        }).error(function(data) {
-          console.log('ERROR: ' + data);
-        });
-      });
-    };
-
-    $scope.urlForClipThumb = function(clipUrl) {
-      var name = clipUrl.substr(clipUrl.lastIndexOf('/') + 1);
-      var trueOrigin = cordova.file.dataDirectory + name;
-      var sliced = trueOrigin.slice(0, -4);
-      return sliced + '.png';
-    }
-
-    $scope.showClip = function(clip) {
-      console.log('show clip: ' + clip);
-    }
   })
 
   .controller('AppCtrl', function ($scope, $http, $localStorage, $state, isLoggedIn) {
